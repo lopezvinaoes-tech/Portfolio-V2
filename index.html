@@ -89,6 +89,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <p>Coding Student · Barcelona, Spain · Available to hire</p>
 <h2>About</h2>
 <p>Curiosity defines me. I'm versatile, and I've learned to adapt to every turn life and work have taken. I'm after growth — and not just in tech. With experience in customer service, content creation and leading small teams, I'm driven by continuous improvement. Above all, I want to leave something behind — and know that what I do helps someone.</p>
+<h2>Projects</h2>
+<ul>
+<li><strong><a href="https://aquaterra-beta.vercel.app" style="color:#f5f5f7">Aquaterra</a></strong> — Real-estate website to invest in Paraguay from Spain: projects, comparator, AI chat and a leads dashboard (JavaScript, Supabase, Vercel).</li>
+<li><strong>Mis Cuentas</strong> — Private personal finance app: imports bank statements, sorts spending and plans monthly savings (React, TypeScript, Supabase).</li>
+</ul>
 <h2>Experience &amp; education</h2>
 <ul>
 <li><strong>Coding Student</strong> — Universae, Barcelona (Now — 2028). Multiplatform &amp; Web App Development (DAM/DAW).</li>
@@ -317,9 +322,21 @@ a{color:#f5f5f7;text-decoration:none}a:hover{color:#fff}
         <div style="position:absolute;left:0;right:0;bottom:0;height:65%;background:radial-gradient(90% 70% at 50% 120%, oklch(var(--acc) / 0.22), rgba(0,0,0,0) 70%);pointer-events:none"></div>
         <div style="position:relative;display:flex;justify-content:space-between;align-items:center">
           <span style="font-size:12px;font-weight:500;letter-spacing:-0.01em;color:#86868b">{{ t.project }}</span>
-          <span style="height:22px;padding:0 9px;display:flex;align-items:center;border-radius:999px;background:oklch(var(--acc) / 0.12);color:oklch(var(--acc-hi));font-size:11px;font-weight:500;letter-spacing:-0.01em">{{ t.soon }}</span>
+          <span style="height:22px;padding:0 9px;display:flex;align-items:center;border-radius:999px;background:oklch(var(--acc) / 0.12);color:oklch(var(--acc-hi));font-size:11px;font-weight:500;letter-spacing:-0.01em">{{ p.tag }}</span>
         </div>
+        <sc-if value="{{ p.soon }}" hint-placeholder-val="{{ true }}">
         <span style="position:relative;font-size:56px;font-weight:600;line-height:0.9;letter-spacing:-0.06em;color:#f5f5f7">{{ p.n }}</span>
+        </sc-if>
+        <sc-if value="{{ p.real }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;display:flex;flex-direction:column;gap:8px;text-align:left">
+          <span style="font-size:clamp(17px,1.6vw,24px);font-weight:600;line-height:1;letter-spacing:-0.045em;color:#f5f5f7">{{ p.name }}</span>
+          <span style="font-size:clamp(11px,0.95vw,13px);line-height:1.35;letter-spacing:-0.01em;color:#a1a1a6;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">{{ p.desc }}</span>
+          <span style="font-size:10.5px;font-weight:500;letter-spacing:0;color:#6e6e73">{{ p.stack }}</span>
+        </div>
+        </sc-if>
+        <sc-if value="{{ p.hasLink }}" hint-placeholder-val="{{ false }}">
+        <a href="{{ p.href }}" target="_blank" rel="noopener" draggable="false" onClick="{{ p.click }}" aria-label="{{ p.aria }}" style="position:absolute;inset:0;z-index:2;border-radius:22px"></a>
+        </sc-if>
       </div>
     </sc-for>
   </div>
@@ -538,7 +555,14 @@ class Component extends DCLogic {
   cardEls = [];
   rows = null;
   c = null; cT = null; live = false; step = 200; cMin = 0; cMax = 0; sAbout = 4.02;
-  projects = Array.from({ length: 8 }, (_, i) => ({ n: String(i + 1).padStart(2, '0'), ref: el => { this.cardEls[i] = el; } }));
+  // First cards are real projects (texts in I18N.pj); the rest stay as "Soon" placeholders
+  PROJ = [
+    { id: 'aq', name: 'Aquaterra', href: 'https://aquaterra-beta.vercel.app', stack: 'JavaScript · Supabase · Vercel' },
+    { id: 'fin', name: 'Mis Cuentas', href: '', stack: 'React · TypeScript · Supabase' }
+  ];
+  projects = Array.from({ length: 6 }, (_, i) => ({ i, n: String(i + 1).padStart(2, '0'), ref: el => { this.cardEls[i] = el; } }));
+  // A click right after dragging the carousel must not open the link
+  cardClick = e => { if (this.moved) e.preventDefault(); };
   r(k) { return this._r[k] || (this._r[k] = el => { this.el[k] = el; }); }
 
   // ════ 2. TEXTS (EN / ES) ════════════════════════════════════════════════════
@@ -557,7 +581,12 @@ class Component extends DCLogic {
       heroLh: 'calc(0.95 * clamp(33px,4.4vw,88px))', heroTop: '-5px',
       iAm: 'I am', heroA: 'Coding', heroB: 'Student.', heroBShort: 'Student',
       visorLabel: 'Toggle visor', visorOn: 'Visor on', visorOff: 'Visor off', contactMe: 'Contact me',
-      comingA: 'Coming', comingB: 'soon.', project: 'Project', soon: 'Soon',
+      comingA: 'Recent', comingB: 'work.', project: 'Project', soon: 'Soon',
+      pj: {
+        aq: { tag: 'Live', desc: 'Real-estate site to invest in Paraguay from Spain, with AI chat and a leads panel.' },
+        fin: { tag: 'Private', desc: 'Finance app that imports my bank statements and plans my savings.' }
+      },
+      openProject: 'Open',
       prevProject: 'Previous project', nextProject: 'Next project',
       whoA: 'Who am', whoB: 'I?',
       bioLead: 'Curiosity defines me.',
@@ -602,7 +631,12 @@ class Component extends DCLogic {
       heroLh: 'calc(0.95 * clamp(33px,4.4vw,88px))', heroTop: '-5px',
       iAm: 'Soy', heroA: 'Programador', heroB: 'en formación.', heroBShort: 'en formación',
       visorLabel: 'Activar o desactivar el visor', visorOn: 'Visor activado', visorOff: 'Visor desactivado', contactMe: 'Contáctame',
-      comingA: 'Muy', comingB: 'pronto.', project: 'Proyecto', soon: 'Pronto',
+      comingA: 'Trabajo', comingB: 'reciente.', project: 'Proyecto', soon: 'Pronto',
+      pj: {
+        aq: { tag: 'En vivo', desc: 'Web para invertir en Paraguay desde España, con chat IA y panel de leads.' },
+        fin: { tag: 'Privada', desc: 'App que importa mis extractos del banco y planifica mi ahorro.' }
+      },
+      openProject: 'Abrir',
       prevProject: 'Proyecto anterior', nextProject: 'Proyecto siguiente',
       whoA: '¿Quién', whoB: 'soy?',
       bioLead: 'La curiosidad me define.',
@@ -1118,7 +1152,7 @@ class Component extends DCLogic {
   go(dir) { this.cT = Math.min(this.cMax, Math.max(this.cMin, Math.round(this.cT) + dir)); this.kick(); }
   onDown = e => {
     if (!this.live) return;
-    this.dragging = true; this.sx = this.lx = e.clientX; this.sc = this.c; this.lt = performance.now(); this.v = 0;
+    this.dragging = true; this.moved = false; this.sx = this.lx = e.clientX; this.sc = this.c; this.lt = performance.now(); this.v = 0;
     window.addEventListener('pointermove', this.onMove);
     window.addEventListener('pointerup', this.onUp);
     window.addEventListener('pointercancel', this.onUp);
@@ -1130,6 +1164,7 @@ class Component extends DCLogic {
     if (c > this.cMax) c = this.cMax + (c - this.cMax) * 0.35;
     const now = performance.now(), dt = Math.max(1, now - this.lt);
     this.v = 0.75 * this.v + 0.25 * ((e.clientX - this.lx) / dt);
+    if (Math.abs(e.clientX - this.sx) > 6) this.moved = true;
     this.lx = e.clientX; this.lt = now; this.c = c; this.kick();
   };
   onUp = () => {
@@ -1268,7 +1303,11 @@ class Component extends DCLogic {
       setEn: () => this.setLang('en'), setEs: () => this.setLang('es'),
       enBg: lang === 'en' ? 'rgba(255,255,255,0.16)' : segOff, enFg: lang === 'en' ? segOn : '#86868b',
       esBg: lang === 'es' ? 'rgba(255,255,255,0.16)' : segOff, esFg: lang === 'es' ? segOn : '#86868b',
-      halo, wide, narrow: !wide, visor, noVisor: !visor, heroImgOp: this.state.heroReady ? 1 : 0, visorGreen: visor && haloKey !== 'red', visorRed: visor && haloKey === 'red', projects: this.projects,
+      halo, wide, narrow: !wide, visor, noVisor: !visor, heroImgOp: this.state.heroReady ? 1 : 0, visorGreen: visor && haloKey !== 'red', visorRed: visor && haloKey === 'red', projects: this.projects.map(p => {
+        const d = this.PROJ[p.i], x = d && T.pj[d.id];
+        return d ? { ...p, real: true, soon: false, name: d.name, desc: x.desc, tag: x.tag, stack: d.stack, hasLink: !!d.href, href: d.href, click: this.cardClick, aria: T.openProject + ' ' + d.name }
+                 : { ...p, real: false, soon: true, tag: T.soon, hasLink: false };
+      }),
       haloOpen: !!this.state.haloOpen,
       toggleHaloPanel: () => this.setState(st => ({ haloOpen: !st.haloOpen })),
       hpOp: this.state.haloOpen ? 1 : 0, hpVis: this.state.haloOpen ? 'visible' : 'hidden',

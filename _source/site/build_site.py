@@ -34,6 +34,11 @@ ES_NOSCRIPT = """<noscript>
 <p>Programador en formación · Barcelona, España · Disponible para trabajar</p>
 <h2>Sobre mí</h2>
 <p>La curiosidad me define. Soy versátil y he aprendido a adaptarme a cada giro que han dado la vida y el trabajo. Busco crecer, y no solo en tecnología. Con experiencia en atención al cliente, creación de contenido y liderazgo de equipos pequeños, me mueve la mejora continua. Sobre todo, quiero dejar huella y saber que lo que hago ayuda a alguien.</p>
+<h2>Proyectos</h2>
+<ul>
+<li><strong><a href="https://aquaterra-beta.vercel.app" style="color:#f5f5f7">Aquaterra</a></strong> — Web inmobiliaria para invertir en Paraguay desde España: proyectos, comparador, chat con IA y panel de leads (JavaScript, Supabase, Vercel).</li>
+<li><strong>Mis Cuentas</strong> — App privada de finanzas personales: importa extractos del banco, clasifica gastos y planifica el ahorro mensual (React, TypeScript, Supabase).</li>
+</ul>
 <h2>Experiencia y formación</h2>
 <ul>
 <li><strong>Estudiante de DAM/DAW</strong> — Universae, Barcelona (Ahora — 2028). Desarrollo de Aplicaciones Multiplataforma y Web.</li>
