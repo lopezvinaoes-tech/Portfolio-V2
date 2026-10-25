@@ -16,7 +16,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-SITE = "https://portfolio-six-flax-48.vercel.app"  # no trailing slash
+SITE = "https://santiagolopezv.vercel.app"
 
 ROOT = Path(__file__).resolve().parents[2]
 
