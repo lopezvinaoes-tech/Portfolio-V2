@@ -37,7 +37,7 @@ ES_NOSCRIPT = """<noscript>
 <h2>Proyectos</h2>
 <ul>
 <li><strong><a href="https://aquaterra-beta.vercel.app" style="color:#f5f5f7">Aquaterra</a></strong> — Web inmobiliaria para invertir en Paraguay desde España: proyectos, comparador, chat con IA y panel de leads (JavaScript, Supabase, Vercel).</li>
-<li><strong>Mis Cuentas</strong> — App privada de finanzas personales: importa extractos del banco, clasifica gastos y planifica el ahorro mensual (React, TypeScript, Supabase).</li>
+<li><strong><a href="https://finanzas-personales-eight-lac.vercel.app" style="color:#f5f5f7">Mis Cuentas</a></strong> — App de finanzas personales con demo pública: importa extractos del banco, clasifica gastos y planifica el ahorro mensual (React, TypeScript, Supabase).</li>
 </ul>
 <h2>Experiencia y formación</h2>
 <ul>

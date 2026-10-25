@@ -92,7 +92,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <h2>Projects</h2>
 <ul>
 <li><strong><a href="https://aquaterra-beta.vercel.app" style="color:#f5f5f7">Aquaterra</a></strong> — Real-estate website to invest in Paraguay from Spain: projects, comparator, AI chat and a leads dashboard (JavaScript, Supabase, Vercel).</li>
-<li><strong>Mis Cuentas</strong> — Private personal finance app: imports bank statements, sorts spending and plans monthly savings (React, TypeScript, Supabase).</li>
+<li><strong><a href="https://finanzas-personales-eight-lac.vercel.app" style="color:#f5f5f7">Mis Cuentas</a></strong> — Personal finance app with a public demo: imports bank statements, sorts spending and plans monthly savings (React, TypeScript, Supabase).</li>
 </ul>
 <h2>Experience &amp; education</h2>
 <ul>
@@ -321,13 +321,16 @@ a{color:#f5f5f7;text-decoration:none}a:hover{color:#fff}
       <div ref="{{ p.ref }}" style="position:absolute;left:0;top:0;width:190px;height:320px;opacity:0;visibility:hidden;transform-origin:50% 100%;will-change:transform,opacity;box-sizing:border-box;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#1a1a1c 0%,#0b0b0c 100%);border:1px solid rgba(255,255,255,0.1);box-shadow:0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);display:flex;flex-direction:column;justify-content:space-between;padding:18px">
         <div style="position:absolute;left:0;right:0;bottom:0;height:65%;background:radial-gradient(90% 70% at 50% 120%, oklch(var(--acc) / 0.22), rgba(0,0,0,0) 70%);pointer-events:none"></div>
         <div style="position:relative;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:12px;font-weight:500;letter-spacing:-0.01em;color:#86868b">{{ t.project }}</span>
+          <span style="font-size:12px;font-weight:500;letter-spacing:-0.01em;color:{{ p.labelFg }}">{{ t.project }}</span>
           <span style="height:22px;padding:0 9px;display:flex;align-items:center;border-radius:999px;background:oklch(var(--acc) / 0.12);color:oklch(var(--acc-hi));font-size:11px;font-weight:500;letter-spacing:-0.01em">{{ p.tag }}</span>
         </div>
         <sc-if value="{{ p.soon }}" hint-placeholder-val="{{ true }}">
         <span style="position:relative;font-size:56px;font-weight:600;line-height:0.9;letter-spacing:-0.06em;color:#f5f5f7">{{ p.n }}</span>
         </sc-if>
         <sc-if value="{{ p.real }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;flex:1 1 auto;min-height:0;margin:12px 0 14px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#0b0b0c;box-shadow:0 10px 24px rgba(0,0,0,0.45)">
+          <img src="{{ p.img }}" alt="" loading="lazy" decoding="async" draggable="false" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0;pointer-events:none">
+        </div>
         <div style="position:relative;display:flex;flex-direction:column;gap:8px;text-align:left">
           <span style="font-size:clamp(17px,1.6vw,24px);font-weight:600;line-height:1;letter-spacing:-0.045em;color:#f5f5f7">{{ p.name }}</span>
           <span style="font-size:clamp(11px,0.95vw,13px);line-height:1.35;letter-spacing:-0.01em;color:#a1a1a6;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">{{ p.desc }}</span>
@@ -557,8 +560,8 @@ class Component extends DCLogic {
   c = null; cT = null; live = false; step = 200; cMin = 0; cMax = 0; sAbout = 4.02;
   // First cards are real projects (texts in I18N.pj); the rest stay as "Soon" placeholders
   PROJ = [
-    { id: 'aq', name: 'Aquaterra', href: 'https://aquaterra-beta.vercel.app', stack: 'JavaScript · Supabase · Vercel' },
-    { id: 'fin', name: 'Mis Cuentas', href: '', stack: 'React · TypeScript · Supabase' }
+    { id: 'aq', name: 'Aquaterra', href: 'https://aquaterra-beta.vercel.app', img: 'assets/projects/aq.webp?v=3', stack: 'JavaScript · Supabase · Vercel' },
+    { id: 'fin', name: 'Mis Cuentas', href: 'https://finanzas-personales-eight-lac.vercel.app', img: 'assets/projects/fin.webp?v=3', stack: 'React · TypeScript · Supabase' }
   ];
   projects = Array.from({ length: 6 }, (_, i) => ({ i, n: String(i + 1).padStart(2, '0'), ref: el => { this.cardEls[i] = el; } }));
   // A click right after dragging the carousel must not open the link
@@ -584,7 +587,7 @@ class Component extends DCLogic {
       comingA: 'Recent', comingB: 'work.', project: 'Project', soon: 'Soon',
       pj: {
         aq: { tag: 'Live', desc: 'Real-estate site to invest in Paraguay from Spain, with AI chat and a leads panel.' },
-        fin: { tag: 'Private', desc: 'Finance app that imports my bank statements and plans my savings.' }
+        fin: { tag: 'Demo', desc: 'Finance app that imports bank statements and plans your savings. Try the demo.' }
       },
       openProject: 'Open',
       prevProject: 'Previous project', nextProject: 'Next project',
@@ -634,7 +637,7 @@ class Component extends DCLogic {
       comingA: 'Trabajo', comingB: 'reciente.', project: 'Proyecto', soon: 'Pronto',
       pj: {
         aq: { tag: 'En vivo', desc: 'Web para invertir en Paraguay desde España, con chat IA y panel de leads.' },
-        fin: { tag: 'Privada', desc: 'App que importa mis extractos del banco y planifica mi ahorro.' }
+        fin: { tag: 'Demo', desc: 'App que importa extractos del banco y planifica el ahorro. Prueba la demo.' }
       },
       openProject: 'Abrir',
       prevProject: 'Proyecto anterior', nextProject: 'Proyecto siguiente',
@@ -1305,8 +1308,8 @@ class Component extends DCLogic {
       esBg: lang === 'es' ? 'rgba(255,255,255,0.16)' : segOff, esFg: lang === 'es' ? segOn : '#86868b',
       halo, wide, narrow: !wide, visor, noVisor: !visor, heroImgOp: this.state.heroReady ? 1 : 0, visorGreen: visor && haloKey !== 'red', visorRed: visor && haloKey === 'red', projects: this.projects.map(p => {
         const d = this.PROJ[p.i], x = d && T.pj[d.id];
-        return d ? { ...p, real: true, soon: false, name: d.name, desc: x.desc, tag: x.tag, stack: d.stack, hasLink: !!d.href, href: d.href, click: this.cardClick, aria: T.openProject + ' ' + d.name }
-                 : { ...p, real: false, soon: true, tag: T.soon, hasLink: false };
+        return d ? { ...p, real: true, soon: false, name: d.name, desc: x.desc, tag: x.tag, stack: d.stack, img: d.img, labelFg: '#d2d2d7', hasLink: !!d.href, href: d.href, click: this.cardClick, aria: T.openProject + ' ' + d.name }
+                 : { ...p, real: false, soon: true, tag: T.soon, labelFg: '#86868b', hasLink: false };
       }),
       haloOpen: !!this.state.haloOpen,
       toggleHaloPanel: () => this.setState(st => ({ haloOpen: !st.haloOpen })),
